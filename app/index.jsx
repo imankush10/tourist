@@ -8,36 +8,32 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import { CoinsIcon, Search } from "lucide-react-native";
+import { CoinsIcon, Search, ChevronLeft } from "lucide-react-native";
 import "../global.css";
 
 const FAMOUS_CITIES = [
   {
     id: 1,
     name: "Mumbai",
-    image:
-      "https://s7ap1.scene7.com/is/image/incredibleindia/gateway-of-india-mumbai-maharashtra-2-attr-hero?qlt=82&ts=1727355556744",
+    image: "https://s7ap1.scene7.com/is/image/incredibleindia/gateway-of-india-mumbai-maharashtra-2-attr-hero?qlt=82&ts=1727355556744",
     description: "Gateway of India",
   },
   {
     id: 2,
     name: "Delhi",
-    image:
-      "https://deih43ym53wif.cloudfront.net/large_Rajpath-delhi-shutterstock_1195751923.jpg_7647e1aad2.jpg",
+    image: "https://deih43ym53wif.cloudfront.net/large_Rajpath-delhi-shutterstock_1195751923.jpg_7647e1aad2.jpg",
     description: "India Gate",
   },
   {
     id: 3,
     name: "Jaipur",
-    image:
-      "https://www.jcrcab.com/wp-content/uploads/2020/08/rajasthan-jaipur-148046451622-orijgp.jpg",
+    image: "https://www.jcrcab.com/wp-content/uploads/2020/08/rajasthan-jaipur-148046451622-orijgp.jpg",
     description: "Pink City",
   },
   {
     id: 4,
     name: "Agra",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Taj_Mahal%2C_Agra%2C_India.jpg/1200px-Taj_Mahal%2C_Agra%2C_India.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Taj_Mahal%2C_Agra%2C_India.jpg/1200px-Taj_Mahal%2C_Agra%2C_India.jpg",
     description: "Taj Mahal",
   },
 ];
@@ -72,94 +68,102 @@ const TouristApp = () => {
   };
 
   return (
-    <View className="flex-1 bg-neutral-950">
+    <View className="flex-1 bg-neutral-900">
       {/* Header */}
-      <View className="flex-row justify-between items-center p-4 bg-neutral-900 shadow">
-        <Text className="text-2xl font-bold text-white">EcoTourist</Text>
-        <View className="flex-row items-center gap-4">
-          <CoinsIcon color="yellow"/>
-          <Text className="font-bold">{coins}</Text>
+      <View className="px-6 py-4 bg-neutral-800 shadow-lg">
+        <View className="flex-row justify-between items-center">
+          <Text className="text-3xl font-bold text-white">EcoTourist</Text>
+          <View className="gap-2 flex-row items-center space-x-2 bg-neutral-700 px-4 py-2 rounded-full">
+            <CoinsIcon color="#FFD700" size={20} />
+            <Text className="text-white font-bold text-lg">{coins}</Text>
+          </View>
         </View>
       </View>
 
       {/* Search Bar */}
-      <View className="p-4">
-        <View className="relative">
-          <Search className="absolute left-3 top-3 text-gray-400 w-5 h-5" />
+      <View className="p-4 flex-row items-center bg-neutral-800 px-4 rounded-b-xl mb-4 gap-2">
+          <Search className="z-10" color="#9CA3AF" size={20} />
           <TextInput
             placeholder="Search cities..."
+            placeholderTextColor="#9CA3AF"
             value={searchQuery}
             onChangeText={setSearchQuery}
-            className="w-full p-3 pl-10 rounded-lg border border-gray-300 color-white placeholder:color-white"
+            className="w-full rounded-xl text-lg text-white"
           />
-        </View>
       </View>
 
       {!selectedCity ? (
-        // Famous Cities Grid
+        // Cities Grid
         <FlatList
           data={FAMOUS_CITIES.filter((city) =>
             city.name.toLowerCase().includes(searchQuery.toLowerCase())
           )}
           keyExtractor={(item) => item.id.toString()}
           numColumns={2}
-          contentContainerStyle={{ padding: 16 }}
+          className="px-2"
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => handleCitySelect(item)}
               className="w-1/2 p-2"
             >
-              <View className="border border-white rounded-lg shadow overflow-hidden">
+              <View className="bg-neutral-800 rounded-xl overflow-hidden shadow-lg">
                 <Image
                   source={{ uri: item.image }}
-                  className="h-32 w-full"
+                  className="h-40 w-full"
                   resizeMode="cover"
                 />
-                <View className="p-2 bg-black bg-opacity-50">
-                  <Text className="text-white font-semibold">{item.name}</Text>
-                  <Text className="text-white text-sm">{item.description}</Text>
+                <View className="p-3 bg-black bg-opacity-40">
+                  <Text className="text-white font-bold text-lg">{item.name}</Text>
+                  <Text className="text-neutral-300 text-sm">{item.description}</Text>
                 </View>
               </View>
             </TouchableOpacity>
           )}
         />
       ) : (
-        // Eco Rules Checklist
-        <ScrollView className="p-4">
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-lg font-bold">
-              Eco Rules for {selectedCity.name}
-            </Text>
+        // Eco Rules Screen
+        <ScrollView className="flex-1 px-4 py-2">
+          <View className="flex-row justify-between items-center mb-6">
+            <View>
+              <Text className="text-2xl font-bold text-white">{selectedCity.name}</Text>
+              <Text className="text-neutral-400">Complete eco-friendly tasks</Text>
+            </View>
             <TouchableOpacity
               onPress={() => setSelectedCity(null)}
-              className="px-4 py-2 bg-blue-500 rounded-lg"
+              className="flex-row items-center bg-blue-600 px-4 py-2 rounded-full"
             >
-              <Text className="text-white">Back</Text>
+              <ChevronLeft color="white" size={20} />
+              <Text className="text-white ml-1 font-medium">Back</Text>
             </TouchableOpacity>
           </View>
 
           {ECO_RULES.map((rule) => (
-            <View key={rule.id} className="mb-4 bg-white p-4 rounded-lg shadow">
-              <TouchableOpacity
-                className="flex-row items-center space-x-3"
-                onPress={() => handleRuleComplete(rule.id)}
-              >
+            <TouchableOpacity
+              key={rule.id}
+              onPress={() => handleRuleComplete(rule.id)}
+              className="mb-4"
+            >
+              <View className="flex-row items-center bg-neutral-800 p-4 rounded-xl">
                 <View
-                  className={`w-5 h-5 rounded-full ${
+                  className={`w-6 h-6 rounded-full mr-4 items-center justify-center ${
                     completedRules.has(rule.id)
-                      ? "bg-blue-500"
-                      : "border-2 border-gray-300"
+                      ? "bg-green-500"
+                      : "border-2 border-neutral-400"
                   }`}
-                />
-                <Text className="flex-1">{rule.rule}</Text>
-                <Text className="text-green-500 font-bold">+{rule.points}</Text>
-              </TouchableOpacity>
-            </View>
+                >
+                  {completedRules.has(rule.id) && (
+                    <Text className="text-white text-xs">✓</Text>
+                  )}
+                </View>
+                <Text className="flex-1 text-white">{rule.rule}</Text>
+                <Text className="text-green-400 font-bold">+{rule.points}</Text>
+              </View>
+            </TouchableOpacity>
           ))}
 
           {showAnimation && (
-            <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <Text className="text-2xl font-bold text-green-500 animate-bounce">
+            <View className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <Text className="text-3xl font-bold text-green-500 animate-bounce">
                 +5 Coins!
               </Text>
             </View>
